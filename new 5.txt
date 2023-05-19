@@ -1,0 +1,77 @@
+ <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">{{ $count }} </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">{{ $count }} Notifications</span>
+                        <?php foreach ($jenis as $key) { ?>
+                        <?php if ($key['jenis'] == $key['jenis'] ) { ?>
+                        <?php $total = null; ?>
+                        <?php $waktu = null; ?>
+                        <?php $waktu_int = 0; ?>
+                        <?php $waktu_jam = 0; ?>
+                        <?php $waktu_selisih_jam = null; ?>
+                        <?php $detik = 0; ?>
+                        <?php $menit = 0; ?>
+                        <?php $jam = 0; ?>
+                        <?php $hari = 0; ?>
+                        <?php $diff = 0; ?>
+                        <?php $awal = 0; ?>
+                        <?php $akhiri = 0; ?>
+                        <?php $jenis_key = 0; ?>
+                        <?php foreach ($notif as $j) {
+                            if ($j->jenis == $key->jenis && $j->count_notif != '0') {
+                                $total += $j->count_notif;
+                                $awal = $j->created_at;
+                                $akhir = date('Y-m-d H:i:s'); // waktu sekarang
+                                $waktu_awal = strtotime($awal);
+                                $waktu_akhir = strtotime($akhir);
+                        
+                                //menghitung selisih dengan hasil detik
+                                $diff = $waktu_akhir - $waktu_awal;
+                        
+                                if ($diff < '60') {
+                                    $waktu = $diff . ' detik';
+                                } elseif ($diff < '3600') {
+                                    $menit = $diff / 60;
+                                    $waktu = (int) $menit . ' menit ';
+                                } elseif ($diff < '86400') {
+                                    $jam = $diff / 60 / 60;
+                                    $waktu = (int) $jam . ' jam ';
+                                } else {
+                                    $waktu_jam = $diff - '86400';
+                                    if ($waktu_jam == '0') {
+                                        $waktu_int = $diff / 3600 / 24;
+                                        $waktu = (int) $waktu_int . ' hari ';
+                                    } elseif ($waktu_jam < '60') {
+                                        $waktu_int = $diff / 3600 / 24;
+                                        $waktu = (int) $waktu_int . ' hari ';
+                                    } elseif ($waktu_jam < '3600') {
+                                        $menit = $waktu_jam / 60;
+                                        $waktu_int = $diff / 3600 / 24;
+                                        $waktu = (int) $waktu_int . ' hari ';
+                                    } elseif ($waktu_jam < '86400') {
+                                        $jam = $waktu_jam / 60 / 60;
+                                        $waktu_selisih_jam = (int) $jam . ' jam ';
+                                        $waktu_int = $diff / 3600 / 24;
+                                        $waktu = (int) $waktu_int . ' hari ';
+                                    }
+                                }
+                            }
+                        } ?>
+
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url('admin/transaction/' . $key->jenis . $dd . '/notif') }}" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> <small>{{ $total }}
+                                {{ $key->jenis }}
+                                Notifications</small>
+                            <small class="float-right text-muted">
+                                {{ $waktu }}
+                                {{ $waktu_selisih_jam }}</small>
+                        </a>
+                        <?php } ?>
+                        <?php } ?>
+
+                    </div>
+                </li>
